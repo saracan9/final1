@@ -3,10 +3,10 @@ import numpy as np
 from ultralytics import YOLO
 import math
 
-# Eğittiğin özel modeli yükle
+
 model = YOLO("best.pt")
 
-# Kamerayı başlat
+
 cap = cv2.VideoCapture(1)
 
 def calculate_distance(p1, p2):
@@ -20,7 +20,7 @@ while True:
     results = model(frame)[0]
     people = []
 
-    # Kutuları işle
+  
     for box in results.boxes:
         cls = int(box.cls[0])
         x1, y1, x2, y2 = map(int, box.xyxy[0])
@@ -41,9 +41,9 @@ while True:
         cv2.putText(frame, label, (x1, y1 - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
-    too_close = False  # bayrak: ihlal var mı?
+    too_close = False  
 
-    # Sosyal mesafe kontrolü
+   
     for i in range(len(people)):
         for j in range(i + 1, len(people)):
             dist = calculate_distance(people[i][:2], people[j][:2])
@@ -55,7 +55,7 @@ while True:
                     cv2.putText(frame, "Too Close", (x1, y1 - 10),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
-    # Eğer mesafe ihlali varsa ekranın üstüne yaz!
+
     if too_close:
         cv2.putText(frame, "UYARI: Sosyal mesafe ihlali!", (10, 30),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 3)
